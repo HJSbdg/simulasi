@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PenaHJS - Simulasi & Penawaran Harga Klien | PT. Hasna Jaya Sejahtera</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navyDark: '#0B192C',
+                        navyCard: '#1E2A38',
+                        burgundy: '#800020',
+                        burgundyHover: '#600018',
+                        warmBrown: '#8B5E3C',
+                        warmBronze: '#A67C52',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        /* Print Styles for Official Proposal Document */
+        @media print {
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            .print-card { background: white !important; box-shadow: none !important; border: 1px solid #ccc !important; color: black !important; }
+        }
+        .print-only { display: none; }
+
+        <style>
+    /* Sembunyikan elemen dokumen cetak saat dilihat di layar normal */
+    .print-only {
+        display: none !important;
+    }
+
+    /* Pengaturan khusus saat tombol print/cetak PDF ditekan */
+    @media print {
+        /* Sembunyikan seluruh tampilan aplikasi/dashboard utama */
+        body * {
+            visibility: hidden !important;
+        }
+
+        /* Tampilkan hanya bagian lembar dokumen resmi PT HJS */
+        #printDocument, #printDocument * {
+            visibility: visible !important;
+        }
+
+        /* Atur posisi agar pas di kertas (A4/F4) tanpa sisa margin kosong */
+        #printDocument {
+            display: block !important;
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 1.5cm !important;
+            background: white !important;
+            color: black !important;
+            box-shadow: none !important;
+        }
+    }
+    </style>
+</head>
+<body class="bg-[#07101B] text-slate-100 antialiased selection:bg-warmBronze selection:text-slate-900 min-h-screen flex flex-col">
+
+    <!-- NAVBAR HEADER -->
+    <nav class="sticky top-0 left-0 w-full bg-navyDark/90 backdrop-blur-xl z-50 no-print shadow-2xl shadow-black/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <img src="logo.png" alt="PT Hasna Jaya Sejahtera Logo" class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
+                <div class="flex flex-col">
+                    <span class="font-bold text-base sm:text-lg tracking-wide text-white leading-tight">
+                        PT. HASNA JAYA SEJAHTERA
+                    </span>
+                    <span class="text-[10px] text-warmBronze tracking-widest uppercase font-semibold">PenaHJS Dashboard Module</span>
+                </div>
+            </a>
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="px-4 py-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 text-xs font-semibold text-slate-300 transition flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda
+                </a>
+                <button onclick="resetForm()" class="px-4 py-2 rounded-xl bg-burgundy/30 hover:bg-burgundy text-xs font-semibold text-red-200 hover:text-white transition flex items-center gap-2">
+                    <i class="fa-solid fa-rotate-right"></i> Reset Form
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER (SPLIT SCREEN) -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        
+        <!-- PAGE TITLE -->
+        <div class="mb-8 no-print">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-warmBronze/10 text-warmBronze text-xs font-semibold tracking-wider uppercase mb-2">
+                <i class="fa-solid fa-file-invoice-dollar"></i> Commercial Proposal System
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                Simulasi & Penyusunan Penawaran Harga Klien
+            </h1>
+            <p class="text-slate-400 text-sm mt-1">
+                Kelola parameter penawaran, atur komponen biaya modular, dan hasilkan dokumen penawaran transparan secara instan.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT PANEL: FORM INPUT & CONFIGURATION (60% / 7 Cols) -->
+            <div class="lg:col-span-7 space-y-6 no-print">
+                
+                <!-- STEP 1: DATA KLIEN & PARAMETER -->
+                <div class="p-6 rounded-3xl bg-navyCard/60 backdrop-blur-md shadow-2xl space-y-5">
+                    <div class="flex items-center gap-3 pb-3 border-b border-white/5">
+                        <span class="w-8 h-8 rounded-xl bg-warmBronze/20 text-warmBronze flex items-center justify-center font-bold text-sm">1</span>
+                        <h2 class="text-base font-bold text-white uppercase tracking-wider">Informasi Klien & Parameter Dasar</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-slate-300">Nama Perusahaan / Klien</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500"><i class="fa-solid fa-building"></i></span>
+                                <input type="text" id="clientName" placeholder="Contoh: PT. Maju Sejahtera" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-warmBronze transition">
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-slate-300">Lokasi Penempatan</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500"><i class="fa-solid fa-location-dot"></i></span>
+                                <input type="text" id="clientLocation" placeholder="Contoh: Bandung / Cilegon" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-warmBronze transition">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-slate-300">Jumlah Personel</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500"><i class="fa-solid fa-users"></i></span>
+                                <input type="number" id="personnelCount" value="5" min="1" oninput="calculateProposal()" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-warmBronze transition">
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-slate-300">Periode Kontrak</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500"><i class="fa-solid fa-calendar-days"></i></span>
+                                <select id="contractPeriod" onchange="calculateProposal()" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-warmBronze transition appearance-none">
+                                    <option value="1">1 Bulan</option>
+                                    <option value="3">3 Bulan (Triwulan)</option>
+                                    <option value="6">6 Bulan (Semester)</option>
+                                    <option value="12" selected>12 Bulan (1 Tahun)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-slate-300">Base UMK Wilayah (Rp)</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500"><i class="fa-solid fa-rupiah-sign"></i></span>
+                                <input type="number" id="baseUmk" value="4200000" oninput="calculateProposal()" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-warmBronze transition">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick UMK Pills (Hybrid Database Helper) -->
+                    <div class="space-y-2 pt-1">
+                        <span class="text-[11px] text-slate-400 font-medium">Pilihan Cepat UMK Wilayah Utama:</span>
+                        <div class="flex flex-wrap gap-2">
+                            <button type="button" onclick="setUmk(4200000, 'Bandung')" class="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-warmBronze hover:text-slate-950 text-xs font-semibold transition text-slate-300">Kota Bandung (Rp 4.2jt)</button>
+                            <button type="button" onclick="setUmk(4150000, 'Kab. Bandung')" class="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-warmBronze hover:text-slate-950 text-xs font-semibold transition text-slate-300">Kab. Bandung (Rp 4.15jt)</button>
+                            <button type="button" onclick="setUmk(4100000, 'Cimahi')" class="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-warmBronze hover:text-slate-950 text-xs font-semibold transition text-slate-300">Kota Cimahi (Rp 4.1jt)</button>
+                            <button type="button" onclick="setUmk(3050000, 'Kota Serang')" class="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-warmBronze hover:text-slate-950 text-xs font-semibold transition text-slate-300">Kota Serang (Rp 3.05jt)</button>
+                            <button type="button" onclick="setUmk(4800000, 'DKI Jakarta')" class="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-warmBronze hover:text-slate-950 text-xs font-semibold transition text-slate-300">DKI Jakarta (Rp 4.8jt)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: PILIHAN LAYANAN (VISUAL CARDS) -->
+                <div class="p-6 rounded-3xl bg-navyCard/60 backdrop-blur-md shadow-2xl space-y-4">
+                    <div class="flex items-center gap-3 pb-3 border-b border-white/5">
+                        <span class="w-8 h-8 rounded-xl bg-warmBronze/20 text-warmBronze flex items-center justify-center font-bold text-sm">2</span>
+                        <h2 class="text-base font-bold text-white uppercase tracking-wider">Pilih Jenis Layanan Operasional</h2>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                        <div onclick="selectService('Security / Satpam')" id="card-Security" class="service-card p-4 rounded-2xl bg-slate-900/80 hover:bg-slate-900 cursor-pointer transition text-center space-y-2 ring-2 ring-warmBronze shadow-lg">
+                            <span class="text-2xl">🛡️</span>
+                            <p class="text-xs font-bold text-white">Security</p>
+                        </div>
+                        <div onclick="selectService('Cleaning Service')" id="card-Cleaning" class="service-card p-4 rounded-2xl bg-slate-900/80 hover:bg-slate-900 cursor-pointer transition text-center space-y-2 opacity-70">
+                            <span class="text-2xl">🧹</span>
+                            <p class="text-xs font-bold text-white">Cleaning</p>
+                        </div>
+                        <div onclick="selectService('Driver')" id="card-Driver" class="service-card p-4 rounded-2xl bg-slate-900/80 hover:bg-slate-900 cursor-pointer transition text-center space-y-2 opacity-70">
+                            <span class="text-2xl">🚗</span>
+                            <p class="text-xs font-bold text-white">Driver</p>
+                        </div>
+                        <div onclick="selectService('Alih Daya Umum')" id="card-Alih" class="service-card p-4 rounded-2xl bg-slate-900/80 hover:bg-slate-900 cursor-pointer transition text-center space-y-2 opacity-70">
+                            <span class="text-2xl">🤝</span>
+                            <p class="text-xs font-bold text-white">Alih Daya</p>
+                        </div>
+                        <div onclick="selectService('Catering Corporate')" id="card-Catering" class="service-card p-4 rounded-2xl bg-slate-900/80 hover:bg-slate-900 cursor-pointer transition text-center space-y-2 opacity-70">
+                            <span class="text-2xl">🍱</span>
+                            <p class="text-xs font-bold text-white">Catering</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: KOMPONEN BIAYA MODULAR (CHECKBOX CARDS) -->
+                <div class="p-6 rounded-3xl bg-navyCard/60 backdrop-blur-md shadow-2xl space-y-4">
+                    <div class="flex items-center justify-between pb-3 border-b border-white/5">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-warmBronze/20 text-warmBronze flex items-center justify-center font-bold text-sm">3</span>
+                            <h2 class="text-base font-bold text-white uppercase tracking-wider">Komponen Biaya Tenaga Kerja</h2>
+                        </div>
+                        <span class="text-[11px] text-slate-400">Centang untuk mengaktifkan komponen</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        
+                        <!-- Gaji Pokok -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center gap-2.5 cursor-pointer">
+                                    <input type="checkbox" id="chkGaji" checked disabled class="w-4 h-4 rounded text-warmBronze focus:ring-warmBronze bg-slate-800">
+                                    <span class="text-xs font-bold text-white">Gaji Pokok / UMK Base</span>
+                                </label>
+                                <span class="text-[10px] text-warmBronze font-semibold">Wajib</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400">Mengikuti nilai UMK wilayah yang ditentukan.</p>
+                        </div>
+
+                        <!-- BPJS Ketenagakerjaan -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center gap-2.5 cursor-pointer">
+                                    <input type="checkbox" id="chkBpjsTk" checked onchange="calculateProposal()" class="w-4 h-4 rounded text-warmBronze focus:ring-warmBronze bg-slate-800">
+                                    <span class="text-xs font-bold text-white">BPJS Ketenagakerjaan (4.89%)</span>
+                                </label>
+                                <span class="text-[10px] text-slate-400">JKK, JKM, JHT, JP</span>
+                            </div>
+                            <input type="number" id="valBpjsTk" value="0" readonly class="w-full px-3 py-1.5 rounded-xl bg-slate-950 text-slate-300 text-xs focus:outline-none">
+                        </div>
+
+                        <!-- BPJS Kesehatan -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center gap-2.5 cursor-pointer">
+                                    <input type="checkbox" id="chkBpjsKes" checked onchange="calculateProposal()" class="w-4 h-4 rounded text-warmBronze focus:ring-warmBronze bg-slate-800">
+                                    <span class="text-xs font-bold text-white">BPJS Kesehatan (4%)</span>
+                                </label>
+                                <span class="text-[10px] text-slate-400">Tanggungan Badan Usaha</span>
+                            </div>
+                            <input type="number" id="valBpjsKes" value="0" readonly class="w-full px-3 py-1.5 rounded-xl bg-slate-950 text-slate-300 text-xs focus:outline-none">
+                        </div>
+
+                        <!-- THR -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center gap-2.5 cursor-pointer">
+                                    <input type="checkbox" id="chkThr" checked onchange="calculateProposal()" class="w-4 h-4 rounded text-warmBronze focus:ring-warmBronze bg-slate-800">
+                                    <span class="text-xs font-bold text-white">THR (1 Bulan / 12)</span>
+                                </label>
+                                <span class="text-[10px] text-slate-400">Akumulasi per bulan</span>
+                            </div>
+                            <input type="number" id="valThr" value="0" readonly class="w-full px-3 py-1.5 rounded-xl bg-slate-950 text-slate-300 text-xs focus:outline-none">
+                        </div>
+
+                        <!-- Seragam & Atribut -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center gap-2.5 cursor-pointer">
+                                    <input type="checkbox" id="chkSeragam" checked onchange="calculateProposal()" class="w-4 h-4 rounded text-warmBronze focus:ring-warmBronze bg-slate-800">
+                                    <span class="text-xs font-bold text-white">Seragam & Atribut Dinas</span>
+                                </label>
+                                <span class="text-[10px] text-slate-400">Per Personel / Bln</span>
+                            </div>
+                            <input type="number" id="costSeragam" value="150000" oninput="calculateProposal()" class="w-full px-3 py-1.5 rounded-xl bg-slate-950 text-white text-xs focus:outline-none focus:ring-1 focus:ring-warmBronze">
+                        </div>
+
+                        <!-- Consumables / Alat Kerja -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center gap-2.5 cursor-pointer">
+                                    <input type="checkbox" id="chkConsumables" checked onchange="calculateProposal()" class="w-4 h-4 rounded text-warmBronze focus:ring-warmBronze bg-slate-800">
+                                    <span class="text-xs font-bold text-white">Consumables / Perlengkapan</span>
+                                </label>
+                                <span class="text-[10px] text-slate-400">Alat pendukung kerja</span>
+                            </div>
+                            <input type="number" id="costConsumables" value="100000" oninput="calculateProposal()" class="w-full px-3 py-1.5 rounded-xl bg-slate-950 text-white text-xs focus:outline-none focus:ring-1 focus:ring-warmBronze">
+                        </div>
+
+                        <!-- Tunjangan Jabatan / Operasional -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center gap-2.5 cursor-pointer">
+                                    <input type="checkbox" id="chkTunjangan" onchange="calculateProposal()" class="w-4 h-4 rounded text-warmBronze focus:ring-warmBronze bg-slate-800">
+                                    <span class="text-xs font-bold text-white">Tunjangan Khusus / Jabatan</span>
+                                </label>
+                                <span class="text-[10px] text-slate-400">Opsional</span>
+                            </div>
+                            <input type="number" id="costTunjangan" value="250000" oninput="calculateProposal()" class="w-full px-3 py-1.5 rounded-xl bg-slate-950 text-white text-xs focus:outline-none focus:ring-1 focus:ring-warmBronze">
+                        </div>
+
+                        <!-- Biaya Tambahan Lainnya -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center gap-2.5 cursor-pointer">
+                                    <input type="checkbox" id="chkLainnya" onchange="calculateProposal()" class="w-4 h-4 rounded text-warmBronze focus:ring-warmBronze bg-slate-800">
+                                    <span class="text-xs font-bold text-white">Biaya Operasional Lapangan</span>
+                                </label>
+                                <span class="text-[10px] text-slate-400">Opsional</span>
+                            </div>
+                            <input type="number" id="costLainnya" value="100000" oninput="calculateProposal()" class="w-full px-3 py-1.5 rounded-xl bg-slate-950 text-white text-xs focus:outline-none focus:ring-1 focus:ring-warmBronze">
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- STEP 4: MANAGEMENT FEE HJS & PPN -->
+                <div class="p-6 rounded-3xl bg-navyCard/60 backdrop-blur-md shadow-2xl space-y-4">
+                    <div class="flex items-center gap-3 pb-3 border-b border-white/5">
+                        <span class="w-8 h-8 rounded-xl bg-warmBronze/20 text-warmBronze flex items-center justify-center font-bold text-sm">4</span>
+                        <h2 class="text-base font-bold text-white uppercase tracking-wider">Management Fee HJS & Pengaturan Pajak</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-slate-300">Mode Management Fee</label>
+                            <select id="feeMode" onchange="toggleFeeMode(); calculateProposal();" class="w-full px-4 py-2.5 rounded-xl bg-slate-900/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-warmBronze transition">
+                                <option value="percent">Persentase (%) Dari Total Biaya</option>
+                                <option value="flat">Nominal Tetap (Flat per Personel)</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-1.5" id="wrapperFeePercent">
+                            <label class="text-xs font-semibold text-slate-300">Persentase Fee (%)</label>
+                            <input type="number" id="feePercent" value="10" min="1" max="100" oninput="calculateProposal()" class="w-full px-4 py-2.5 rounded-xl bg-slate-900/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-warmBronze transition">
+                        </div>
+
+                        <div class="space-y-1.5 hidden" id="wrapperFeeFlat">
+                            <label class="text-xs font-semibold text-slate-300">Nominal Fee Flat / Orang (Rp)</label>
+                            <input type="number" id="feeFlat" value="500000" min="0" oninput="calculateProposal()" class="w-full px-4 py-2.5 rounded-xl bg-slate-900/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-warmBronze transition">
+                        </div>
+                    </div>
+
+                    <!-- Minimum Fee Override Note -->
+                    <div class="p-4 rounded-2xl bg-amber-500/10 text-amber-200 text-xs space-y-2">
+                        <div class="flex items-center gap-2 font-semibold">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span>Catatan Override Minimum Fee</span>
+                        </div>
+                        <p class="text-[11px] text-amber-300/80 leading-relaxed">
+                            Jika jumlah personel di bawah kuota minimum perusahaan (misal &lt; 5 personel), admin dapat melakukan override nominal fee secara manual pada hasil kalkulasi sebelah kanan agar margin operasional tetap aman.
+                        </p>
+                    </div>
+
+                    <!-- PPN Toggle -->
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-slate-900/80">
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" id="chkPpn" checked onchange="calculateProposal()" class="w-5 h-5 rounded text-warmBronze focus:ring-warmBronze bg-slate-800">
+                            <div>
+                                <p class="text-xs font-bold text-white">Kenakan PPN (11%)</p>
+                                <p class="text-[11px] text-slate-400">Pajak Pertambahan Nilai sesuai ketentuan perpajakan berlaku.</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold">Aktif</span>
+                    </div>
+                </div>
+
+                <!-- STEP 5: SYARAT & KETENTUAN (TERMS & CONDITIONS) -->
+                <div class="p-6 rounded-3xl bg-navyCard/60 backdrop-blur-md shadow-2xl space-y-4">
+                    <div class="flex items-center gap-3 pb-3 border-b border-white/5">
+                        <span class="w-8 h-8 rounded-xl bg-warmBronze/20 text-warmBronze flex items-center justify-center font-bold text-sm">5</span>
+                        <h2 class="text-base font-bold text-white uppercase tracking-wider">Syarat & Ketentuan Dokumen</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-slate-300">Masa Berlaku Penawaran</label>
+                            <input type="text" id="validityPeriod" value="30 Hari Sejak Tanggal Diterbitkan" class="w-full px-4 py-2.5 rounded-xl bg-slate-900/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-warmBronze transition">
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-slate-300">Nomor Surat Penawaran</label>
+                            <input type="text" id="docNumber" value="042/HJS-SPH/X/2026" class="w-full px-4 py-2.5 rounded-xl bg-slate-900/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-warmBronze transition">
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-semibold text-slate-300">Catatan Khusus / Keterangan Klien</label>
+                        <textarea id="proposalNotes" rows="2" class="w-full px-4 py-2.5 rounded-xl bg-slate-900/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-warmBronze transition" placeholder="Contoh: Harga sudah termasuk pengawasan harian dan laporan kehadiran digital.">Harga sudah termasuk pelatihan berkala, pengawasan operasional, dan laporan kehadiran digital.</textarea>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT PANEL: STICKY LIVE SUMMARY & EXECUTIVE PREVIEW (40% / 5 Cols) -->
+            <div class="lg:col-span-5 space-y-6 sticky top-28">
+                
+                <!-- EXECUTIVE SUMMARY CARD (DARK GLASS) -->
+                <div class="p-6 sm:p-8 rounded-3xl bg-navyCard/90 backdrop-blur-xl shadow-2xl space-y-6 relative overflow-hidden">
+                    <div class="absolute -right-12 -top-12 w-40 h-40 bg-warmBronze/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <!-- Header Preview -->
+                    <div class="flex items-center justify-between pb-4 border-b border-white/10">
+                        <div>
+                            <span class="text-[10px] uppercase font-bold text-warmBronze tracking-widest">Live Calculation</span>
+                            <h3 class="text-lg font-extrabold text-white">Ringkasan Penawaran</h3>
+                        </div>
+                        <span id="previewServiceBadge" class="px-3 py-1 rounded-full bg-burgundy/30 text-warmBronze text-xs font-bold border border-burgundy/40">Security</span>
+                    </div>
+
+                    <!-- Detail Perhitungan Ringkas -->
+                    <div class="space-y-3 text-xs">
+                        <div class="flex justify-between text-slate-300">
+                            <span>Klien:</span>
+                            <span id="resClientName" class="font-bold text-white">PT. Maju Sejahtera</span>
+                        </div>
+                        <div class="flex justify-between text-slate-300">
+                            <span>Jumlah Personel:</span>
+                            <span id="resPersonnel" class="font-bold text-white">5 Orang</span>
+                        </div>
+                        <div class="flex justify-between text-slate-300">
+                            <span>Durasi Kontrak:</span>
+                            <span id="resDuration" class="font-bold text-white">12 Bulan (1 Tahun)</span>
+                        </div>
+                        <div class="flex justify-between text-slate-300">
+                            <span>Biaya Dasar / Personel / Bln:</span>
+                            <span id="resBasePerPerson" class="font-bold text-white">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between text-slate-300">
+                            <span>Total Biaya Seluruh Personel:</span>
+                            <span id="resTotalBase" class="font-bold text-white">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between text-slate-300">
+                            <span>Management Fee HJS:</span>
+                            <span id="resFeeHjs" class="font-bold text-emerald-400">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between text-slate-300">
+                            <span>Subtotal Penawaran:</span>
+                            <span id="resSubtotal" class="font-bold text-white">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between text-slate-300" id="rowPpn">
+                            <span>PPN (11%):</span>
+                            <span id="resPpn" class="font-bold text-white">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <!-- GRAND TOTAL BOX (REVISED) -->
+<div class="p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-navyDark to-slate-900 border border-warmBronze/30 shadow-xl space-y-2">
+    <div>
+        <p class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Tagihan Rutin per Bulan (Invoice)</p>
+        <p id="resMonthlyInvoice" class="text-xl font-bold text-emerald-400">Rp 0</p>
+    </div>
+    <div class="pt-2 border-t border-white/10">
+        <p class="text-[10px] uppercase tracking-wider text-warmBronze font-bold">Total Keseluruhan Nilai Kontrak</p>
+        <p id="resGrandTotal" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Rp 0</p>
+        <p id="resGrandTotalDuration" class="text-[11px] text-slate-400 pt-1">Akumulasi kontrak penuh sesuai durasi.</p>
+    </div>
+</div>
+
+                    <!-- INTERNAL PROFIT MARGIN (ADMIN ONLY VIEW) -->
+                    <div class="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/20 space-y-1 no-print">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5">
+                                <i class="fa-solid fa-shield-halved"></i> Internal Profit Margin (HJS)
+                            </span>
+                            <span class="text-[10px] text-slate-400">Rahasia Manajemen</span>
+                        </div>
+                        <p id="resInternalProfit" class="text-base font-extrabold text-emerald-300">Rp 0</p>
+                        <p class="text-[10px] text-slate-400">Estimasi keuntungan bersih dari akumulasi Management Fee.</p>
+                    </div>
+
+                    <!-- ACTION BUTTONS -->
+<div class="space-y-3 pt-2 no-print">
+    <button onclick="printProposal()" class="w-full py-3.5 rounded-xl bg-burgundy hover:bg-burgundyHover text-white font-bold text-sm transition shadow-lg shadow-burgundy/40 flex items-center justify-center gap-2">
+        <i class="fa-solid fa-print"></i> Cetak / Simpan PDF Penawaran
+    </button>
+    <button onclick="saveToCloudDrive()" class="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm transition shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2">
+        <i class="fa-brands fa-google-drive"></i> Simpan Data Klien Deal (Drive)
+    </button>
+    
+    <!-- Tombol Muat Arsip Klien (.json) Pengganti Salin Ringkasan -->
+    <label class="w-full py-3.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-amber-600/30 cursor-pointer">
+        <i class="fa-solid fa-folder-open"></i> Muat Data Klien
+        <input type="file" id="importJsonFile" accept=".json" class="hidden" onchange="loadClientFromJson(event)">
+    </label>
+
+    <button onclick="openInvoicePreview()" class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30">
+        <i class="fa-solid fa-file-invoice-dollar"></i> Pratinjau & Cetak Invoice Klien
+    </button>
+</div>
+
+    </main>
+
+    <!-- PRINT-ONLY OFFICIAL DOCUMENT TEMPLATE (HIDDEN ON SCREEN, SHOWN ON PRINT) -->
+    <div id="printDocument" class="print-only max-w-4xl mx-auto p-8 bg-white text-slate-900 space-y-6">
+        
+        <!-- Kop Surat Resmi -->
+        <div class="flex items-center justify-between pb-6 border-b-2 border-slate-800">
+            <div class="flex items-center gap-4">
+                <img src="logo.png" alt="Logo PT HJS" class="h-16 w-auto object-contain">
+                <div>
+                    <h2 class="text-xl font-extrabold tracking-wide text-slate-900">PT. HASNA JAYA SEJAHTERA</h2>
+                    <p class="text-xs font-semibold text-slate-600 uppercase tracking-widest">Your Workforce, Our Commitment</p>
+                    <p class="text-[11px] text-slate-500 mt-1">Kantor Pusat: Jl. Garuda No.184, Serang | Kantor Cabang: Jl. Kawung Ece No.15, Bandung</p>
+                </div>
+            </div>
+            <div class="text-right text-xs text-slate-600">
+                <p><strong>No. Surat:</strong> <span id="printDocNumber">042/HJS-SPH/X/2026</span></p>
+                <p><strong>Tanggal:</strong> <span id="printDate">11 Oktober 2026</span></p>
+            </div>
+        </div>
+
+        <!-- Kepada Yth -->
+        <div class="space-y-1 text-sm">
+            <p>Kepada Yth,</p>
+            <p class="font-bold text-base" id="printClientName">PT. Maju Sejahtera</p>
+            <p>Di <span id="printLocation">Bandung</span></p>
+        </div>
+
+        <!-- Perihal -->
+        <div class="space-y-2 text-sm pt-2">
+            <p class="font-bold">Perihal: Penawaran Kerja sama Penyediaan Jasa <span id="printServiceName">Security / Satpam</span></p>
+            <p class="text-slate-700 leading-relaxed">
+                Dengan hormat,<br>
+                Sehubungan dengan kebutuhan operasional di perusahaan Bapak/Ibu, bersama surat ini kami PT. Hasna Jaya Sejahtera mengajukan penawaran resmi penyediaan tenaga kerja alih daya profesional dengan rincian sebagai berikut:
+            </p>
+        </div>
+
+        <!-- Tabel Rincian -->
+        <table class="w-full text-xs border-collapse border border-slate-300 mt-4">
+            <thead>
+                <tr class="bg-slate-100 text-slate-900">
+                    <th class="border border-slate-300 p-2 text-left">No</th>
+                    <th class="border border-slate-300 p-2 text-left">Komponen Biaya / Layanan</th>
+                    <th class="border border-slate-300 p-2 text-right">Jumlah Personel</th>
+                    <th class="border border-slate-300 p-2 text-right">Nominal / Personel / Bln</th>
+                    <th class="border border-slate-300 p-2 text-right">Total Per Bulan</th>
+                </tr>
+            </thead>
+            <tbody id="printTableBody">
+                <!-- Diisi via JavaScript -->
+            </tbody>
+        </table>
+
+        <!-- Ringkasan Total & Pembayaran -->
+        <div class="flex justify-end pt-4">
+            <div class="w-72 space-y-2 text-xs">
+                <div class="flex justify-between py-1 border-b border-slate-200">
+                    <span>Subtotal per Bulan:</span>
+                    <span id="printSubtotal" class="font-bold">Rp 0</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-slate-200" id="printRowPpn">
+                    <span>PPN (11%):</span>
+                    <span id="printPpn" class="font-bold">Rp 0</span>
+                </div>
+                <div class="flex justify-between py-2 text-sm font-bold bg-slate-100 px-2 rounded">
+                    <span>Total Tagihan / Bulan:</span>
+                    <span id="printGrandTotalMonth">Rp 0</span>
+                </div>
+                <div class="flex justify-between py-2 text-sm font-extrabold bg-warmBronze/20 text-slate-900 px-2 rounded">
+                    <span>Total Nilai Kontrak (<span id="printDurationText">12 Bulan</span>):</span>
+                    <span id="printGrandTotalContract">Rp 0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Catatan & Ketentuan -->
+        <div class="space-y-2 text-xs pt-4 border-t border-slate-200">
+            <p class="font-bold text-slate-800">Syarat & Ketentuan:</p>
+            <ul class="list-disc pl-5 space-y-1 text-slate-600">
+                <li>Masa Berlaku Penawaran: <span id="printValidity">30 Hari Sejak Tanggal Diterbitkan</span>.</li>
+                <li>Catatan Operasional: <span id="printNotes">Harga sudah termasuk pelatihan berkala, pengawasan operasional, dan laporan kehadiran digital.</span></li>
+                <li>Pembayaran dilakukan selambat-lambatnya 7 hari setelah terbitnya berita acara dan invoice bulanan.</li>
+            </ul>
+        </div>
+
+        <!-- Tanda Tangan -->
+        <div class="flex justify-between pt-12 text-xs">
+            <div class="text-center space-y-16">
+                <p>Hormat Kami,<br><strong>PT. HASNA JAYA SEJAHTERA</strong></p>
+                <p class="font-bold underline">Tim Operasional & Pemasaran</p>
+            </div>
+            <div class="text-center space-y-16">
+                <p>Pihak Klien,<br><strong id="printClientSign">PT. Maju Sejahtera</strong></p>
+                <p class="font-bold underline">(_________________________)</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        let selectedServiceName = "Security / Satpam";
+
+        // Fungsi Pilih Layanan (Visual Cards)
+        function selectService(serviceName) {
+            selectedServiceName = serviceName;
+            document.querySelectorAll('.service-card').forEach(card => {
+                card.classList.remove('ring-2', 'ring-warmBronze', 'shadow-lg');
+                card.classList.add('opacity-70');
+            });
+            const activeCard = document.getElementById('card-' + serviceName.split(' ')[0]);
+            if (activeCard) {
+                activeCard.classList.remove('opacity-70');
+                activeCard.classList.add('ring-2', 'ring-warmBronze', 'shadow-lg');
+            }
+            document.getElementById('previewServiceBadge').innerText = serviceName;
+            calculateProposal();
+        }
+
+        // Fungsi Quick UMK Helper
+        function setUmk(nominal, cityName) {
+            document.getElementById('baseUmk').value = nominal;
+            document.getElementById('clientLocation').value = cityName;
+            calculateProposal();
+        }
+
+        // Toggle Fee Mode
+        function toggleFeeMode() {
+            const mode = document.getElementById('feeMode').value;
+            if (mode === 'percent') {
+                document.getElementById('wrapperFeePercent').classList.remove('hidden');
+                document.getElementById('wrapperFeeFlat').classList.add('hidden');
+            } else {
+                document.getElementById('wrapperFeePercent').classList.add('hidden');
+                document.getElementById('wrapperFeeFlat').classList.remove('hidden');
+            }
+        }
+
+        // Format Rupiah Helper
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(number);
+        }
+
+        // Core Calculation Engine
+        function calculateProposal() {
+            // Get inputs
+            const clientName = document.getElementById('clientName').value || 'PT. Klien Mitra';
+            const location = document.getElementById('clientLocation').value || 'Bandung';
+            const personnel = parseInt(document.getElementById('personnelCount').value) || 1;
+            const durationMonths = parseInt(document.getElementById('contractPeriod').value) || 12;
+            const baseUmk = parseFloat(document.getElementById('baseUmk').value) || 0;
+
+            // BPJS & THR Automatic Formulas based on UMK Base
+            const bpjsTk = document.getElementById('chkBpjsTk').checked ? baseUmk * 0.0489 : 0;
+            const bpjsKes = document.getElementById('chkBpjsKes').checked ? baseUmk * 0.04 : 0;
+            const thr = document.getElementById('chkThr').checked ? baseUmk / 12 : 0;
+
+            // Update readonly inputs for visual clarity
+            document.getElementById('valBpjsTk').value = Math.round(bpjsTk);
+            document.getElementById('valBpjsKes').value = Math.round(bpjsKes);
+            document.getElementById('valThr').value = Math.round(thr);
+
+            // Optional Costs
+            const seragam = document.getElementById('chkSeragam').checked ? (parseFloat(document.getElementById('costSeragam').value) || 0) : 0;
+            const consumables = document.getElementById('chkConsumables').checked ? (parseFloat(document.getElementById('costConsumables').value) || 0) : 0;
+            const tunjangan = document.getElementById('chkTunjangan').checked ? (parseFloat(document.getElementById('costTunjangan').value) || 0) : 0;
+            const lainnya = document.getElementById('chkLainnya').checked ? (parseFloat(document.getElementById('costLainnya').value) || 0) : 0;
+
+            // Total Base per Person per Month
+            const basePerPerson = baseUmk + bpjsTk + bpjsKes + thr + seragam + consumables + tunjangan + lainnya;
+            const totalBaseAllPersonnel = basePerPerson * personnel;
+
+            // Management Fee HJS Calculation
+            const feeMode = document.getElementById('feeMode').value;
+            let totalFeeHjsMonthly = 0;
+            if (feeMode === 'percent') {
+                const feePct = parseFloat(document.getElementById('feePercent').value) || 10;
+                totalFeeHjsMonthly = totalBaseAllPersonnel * (feePct / 100);
+            } else {
+                const feeFlatPerPerson = parseFloat(document.getElementById('feeFlat').value) || 0;
+                totalFeeHjsMonthly = feeFlatPerPerson * personnel;
+            }
+
+            // Subtotal Monthly
+            const subtotalMonthly = totalBaseAllPersonnel + totalFeeHjsMonthly;
+
+            // PPN 11%
+            const usePpn = document.getElementById('chkPpn').checked;
+            const ppnMonthly = usePpn ? subtotalMonthly * 0.11 : 0;
+
+            // Grand Total Monthly & Contract Grand Total
+            const grandTotalMonthly = subtotalMonthly + ppnMonthly;
+            const grandTotalContract = grandTotalMonthly * durationMonths;
+            // Update nilai ke elemen baru di panel kanan
+document.getElementById('resMonthlyInvoice').innerText = formatRupiah(grandTotalMonthly);
+
+            // Internal Profit Margin (Accumulated Monthly Management Fee * Duration)
+            const internalProfit = totalFeeHjsMonthly * durationMonths;
+
+            // Update UI Live Preview
+            document.getElementById('resClientName').innerText = clientName;
+            document.getElementById('resPersonnel').innerText = personnel + ' Orang';
+            const durationText = document.getElementById('contractPeriod').options[document.getElementById('contractPeriod').selectedIndex].text;
+            document.getElementById('resDuration').innerText = durationText;
+            document.getElementById('resBasePerPerson').innerText = formatRupiah(basePerPerson);
+            document.getElementById('resTotalBase').innerText = formatRupiah(totalBaseAllPersonnel);
+            document.getElementById('resFeeHjs').innerText = formatRupiah(totalFeeHjsMonthly) + ' /bln';
+            document.getElementById('resSubtotal').innerText = formatRupiah(subtotalMonthly) + ' /bln';
+            
+            if (usePpn) {
+                document.getElementById('rowPpn').style.display = 'flex';
+                document.getElementById('resPpn').innerText = formatRupiah(ppnMonthly) + ' /bln';
+            } else {
+                document.getElementById('rowPpn').style.display = 'none';
+            }
+
+            document.getElementById('resGrandTotal').innerText = formatRupiah(grandTotalContract);
+            document.getElementById('resGrandTotalDuration').innerText = `Estimasi total nilai kontrak untuk ${durationText} (${formatRupiah(grandTotalMonthly)} /bulan).`;
+            document.getElementById('resInternalProfit').innerText = formatRupiah(internalProfit);
+
+            // Populate Print Template Hidden Fields
+            document.getElementById('printDocNumber').innerText = document.getElementById('docNumber').value;
+            document.getElementById('printDate').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('printClientName').innerText = clientName;
+            document.getElementById('printLocation').innerText = location;
+            document.getElementById('printServiceName').innerText = selectedServiceName;
+            document.getElementById('printSubtotal').innerText = formatRupiah(subtotalMonthly);
+            
+            if (usePpn) {
+                document.getElementById('printRowPpn').style.display = 'flex';
+                document.getElementById('printPpn').innerText = formatRupiah(ppnMonthly);
+            } else {
+                document.getElementById('printRowPpn').style.display = 'none';
+            }
+
+            document.getElementById('printGrandTotalMonth').innerText = formatRupiah(grandTotalMonthly);
+            document.getElementById('printGrandTotalContract').innerText = formatRupiah(grandTotalContract);
+            document.getElementById('printDurationText').innerText = durationText;
+            document.getElementById('printValidity').innerText = document.getElementById('validityPeriod').value;
+            document.getElementById('printNotes').innerText = document.getElementById('proposalNotes').value;
+            document.getElementById('printClientSign').innerText = clientName;
+
+            // Populate Print Table Rows
+            let tbodyHtml = '';
+            let rowNo = 1;
+            tbodyHtml += `<tr><td class="border border-slate-300 p-2">${rowNo++}</td><td class="border border-slate-300 p-2">Gaji Pokok / UMK Base (${location})</td><td class="border border-slate-300 p-2 text-right">${personnel} Orang</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(baseUmk)}</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(baseUmk * personnel)}</td></tr>`;
+            
+            if(document.getElementById('chkBpjsTk').checked) {
+                tbodyHtml += `<tr><td class="border border-slate-300 p-2">${rowNo++}</td><td class="border border-slate-300 p-2">BPJS Ketenagakerjaan</td><td class="border border-slate-300 p-2 text-right">${personnel} Orang</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(bpjsTk)}</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(bpjsTk * personnel)}</td></tr>`;
+            }
+            if(document.getElementById('chkBpjsKes').checked) {
+                tbodyHtml += `<tr><td class="border border-slate-300 p-2">${rowNo++}</td><td class="border border-slate-300 p-2">BPJS Kesehatan</td><td class="border border-slate-300 p-2 text-right">${personnel} Orang</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(bpjsKes)}</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(bpjsKes * personnel)}</td></tr>`;
+            }
+            if(document.getElementById('chkThr').checked) {
+                tbodyHtml += `<tr><td class="border border-slate-300 p-2">${rowNo++}</td><td class="border border-slate-300 p-2">Tunjangan Hari Raya (THR)</td><td class="border border-slate-300 p-2 text-right">${personnel} Orang</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(thr)}</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(thr * personnel)}</td></tr>`;
+            }
+            if(document.getElementById('chkSeragam').checked) {
+                tbodyHtml += `<tr><td class="border border-slate-300 p-2">${rowNo++}</td><td class="border border-slate-300 p-2">Seragam & Atribut Dinas</td><td class="border border-slate-300 p-2 text-right">${personnel} Orang</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(seragam)}</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(seragam * personnel)}</td></tr>`;
+            }
+            if(document.getElementById('chkConsumables').checked) {
+                tbodyHtml += `<tr><td class="border border-slate-300 p-2">${rowNo++}</td><td class="border border-slate-300 p-2">Consumables / Perlengkapan</td><td class="border border-slate-300 p-2 text-right">${personnel} Orang</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(consumables)}</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(consumables * personnel)}</td></tr>`;
+            }
+            if(document.getElementById('chkTunjangan').checked) {
+                tbodyHtml += `<tr><td class="border border-slate-300 p-2">${rowNo++}</td><td class="border border-slate-300 p-2">Tunjangan Khusus / Jabatan</td><td class="border border-slate-300 p-2 text-right">${personnel} Orang</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(tunjangan)}</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(tunjangan * personnel)}</td></tr>`;
+            }
+            if(document.getElementById('chkLainnya').checked) {
+                tbodyHtml += `<tr><td class="border border-slate-300 p-2">${rowNo++}</td><td class="border border-slate-300 p-2">Biaya Operasional Lapangan</td><td class="border border-slate-300 p-2 text-right">${personnel} Orang</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(lainnya)}</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(lainnya * personnel)}</td></tr>`;
+            }
+            // Management Fee Row
+            tbodyHtml += `<tr class="bg-slate-50 font-semibold"><td class="border border-slate-300 p-2">${rowNo++}</td><td class="border border-slate-300 p-2">Management Fee HJS (Operasional & Layanan)</td><td class="border border-slate-300 p-2 text-right">${personnel} Orang</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(totalFeeHjsMonthly / personnel)}</td><td class="border border-slate-300 p-2 text-right">${formatRupiah(totalFeeHjsMonthly)}</td></tr>`;
+
+            document.getElementById('printTableBody').innerText = ''; // clear
+            document.getElementById('printTableBody').innerHTML = tbodyHtml;
+        }
+
+        // Trigger Print Window
+        function printProposal() {
+            window.print();
+        }
+
+        // Reset Form
+        function resetForm() {
+            document.getElementById('clientName').value = '';
+            document.getElementById('clientLocation').value = '';
+            document.getElementById('personnelCount').value = 5;
+            document.getElementById('baseUmk').value = 4200000;
+            calculateProposal();
+        }
+
+        // Run initial calculation on page load
+        window.onload = function() {
+            calculateProposal();
+        };
+    
+    // Fungsi Simpan ke Cloud / Google Drive dengan Konfirmasi Email Dinamis
+        function saveToCloudDrive() {
+            const clientName = document.getElementById('clientName').value.trim() || 'Klien-Tanpa-Nama';
+            
+            // Default email perusahaan saat ini, bisa diubah sewaktu-waktu oleh admin jika ada pergantian
+            const defaultEmail = "hasnajayabandung@gmail.com";
+            const adminEmailInput = prompt("Konfirmasi Email Pengelola / Perusahaan untuk Arsip Database:", defaultEmail);
+            
+            if (adminEmailInput === null) return; // Batal jika admin klik Cancel
+
+            const safeFileName = `HJS-Data-Deal-${clientName.replace(/[^a-zA-Z0-9]/g, '_')}.json`;
+
+            // Kumpulkan seluruh data transaksi termasuk email pengelola yang aktif
+            const proposalData = {
+                timestamp: new Date().toISOString(),
+                company: "PT. Hasna Jaya Sejahtera",
+                managedByEmail: adminEmailInput.trim() || defaultEmail,
+                client: clientName,
+                location: document.getElementById('clientLocation').value,
+                service: selectedServiceName,
+                personnelCount: parseInt(document.getElementById('personnelCount').value),
+                contractPeriodMonths: parseInt(document.getElementById('contractPeriod').value),
+                baseUmk: parseFloat(document.getElementById('baseUmk').value),
+                monthlyInvoice: document.getElementById('resMonthlyInvoice').innerText,
+                totalContractValue: document.getElementById('resGrandTotal').innerText,
+                internalProfitMargin: document.getElementById('resInternalProfit').innerText,
+                notes: document.getElementById('proposalNotes').value
+            };
+
+            // Konversi objek ke string JSON yang rapi
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(proposalData, null, 2));
+            
+            // Buat elemen download virtual
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", safeFileName);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+
+            alert(`Data klien "${clientName}" berhasil disiapkan!\n\nAtas nama email: ${proposalData.managedByEmail}\nTips: Unggah file ini ke folder Google Drive perusahaan. Jika file dengan nama perusahaan yang sama sudah ada, pilih opsi "Timpa / Overwrite".`);
+        }
+        </script>
+       <!-- CUSTOM MODAL POPUP CONFIG EMAIL & DEAL OFFICER (BERSIH) -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const modalHTML = `
+        <div id="emailModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+            <div class="bg-slate-900 border border-warmBronze/40 rounded-2xl p-6 w-full max-w-md shadow-2xl space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <h3 class="text-white font-bold text-base flex items-center gap-2">
+                        <i class="fa-brands fa-google-drive text-blue-400"></i> Konfigurasi Arsip & Petugas Deal
+                    </h3>
+                    <button onclick="closeEmailModal()" class="text-slate-400 hover:text-white text-sm font-bold">&times;</button>
+                </div>
+                <div class="space-y-3">
+                    <p class="text-xs text-slate-300">
+                        Lengkapi data administratif di bawah ini sebelum arsip kontrak disimpan ke Google Drive perusahaan:
+                    </p>
+                    
+                    <!-- Input Nama Petugas (Bersih tanpa contoh/placeholder) -->
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Nama Petugas / Sales Penanggung Jawab</label>
+                        <input type="text" id="modalDealOfficer" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-warmBronze">
+                    </div>
+
+                    <!-- Input Email Perusahaan (Bersih tanpa default email) -->
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Email Pengelola Perusahaan</label>
+                        <input type="email" id="modalAdminEmail" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-warmBronze">
+                    </div>
+                </div>
+                <div class="flex items-center justify-end gap-3 pt-2">
+                    <button onclick="closeEmailModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition">Batal</button>
+                    <button onclick="executeSaveToCloud()" class="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition shadow-lg shadow-blue-600/30">Simpan ke Drive</button>
+                </div>
+            </div>
+        </div>`;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+    });
+
+    function saveToCloudDrive() {
+        document.getElementById('emailModal').classList.remove('hidden');
+    }
+
+    function closeEmailModal() {
+        document.getElementById('emailModal').classList.add('hidden');
+    }
+
+    function executeSaveToCloud() {
+        const clientName = document.getElementById('clientName').value.trim() || 'Klien-Tanpa-Nama';
+        const officerName = document.getElementById('modalDealOfficer').value.trim() || 'Tidak Tercatat';
+        const adminEmailInput = document.getElementById('modalAdminEmail').value.trim() || 'hasnajayabandung@gmail.com';
+        
+        closeEmailModal();
+
+        const safeFileName = `HJS-Deal-${clientName.replace(/[^a-zA-Z0-9]/g, '_')}.json`;
+
+        const proposalData = {
+            timestamp: new Date().toISOString(),
+            company: "PT. Hasna Jaya Sejahtera",
+            managedByEmail: adminEmailInput,
+            officerInCharge: officerName,
+            client: clientName,
+            location: document.getElementById('clientLocation').value,
+            service: selectedServiceName,
+            personnelCount: parseInt(document.getElementById('personnelCount').value),
+            contractPeriodMonths: parseInt(document.getElementById('contractPeriod').value),
+            baseUmk: parseFloat(document.getElementById('baseUmk').value),
+            monthlyInvoice: document.getElementById('resMonthlyInvoice').innerText,
+            totalContractValue: document.getElementById('resGrandTotal').innerText,
+            internalProfitMargin: document.getElementById('resInternalProfit').innerText,
+            notes: document.getElementById('proposalNotes').value
+        };
+
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(proposalData, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", safeFileName);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+
+        alert(`Data kontrak klien "${clientName}" berhasil disiapkan!\n\nPenanggung Jawab: ${officerName}\nArsip Email: ${adminEmailInput}`);
+    }
+</script>
+<!-- CUSTOM INVOICE PREVIEW MODAL & PRINT TEMPLATE -->
+<!-- CUSTOM INVOICE PREVIEW MODAL & PRINT TEMPLATE (FIXED POSITION & HEADER) -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const invoiceModalHTML = `
+        <div id="invoicePreviewModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-start justify-center hidden overflow-y-auto p-4 pt-10 pb-10">
+            <div class="bg-white text-slate-900 rounded-2xl w-full max-w-3xl shadow-2xl overflow-hidden my-auto">
+                
+                <!-- Header Aksi Modal (Hanya tampil di layar) -->
+                <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between sticky top-0 z-20 border-b border-slate-800">
+                    <h3 class="font-bold text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-file-invoice text-emerald-400"></i> Pratinjau Dokumen Invoice Resmi HJS
+                    </h3>
+                    <div class="flex items-center gap-2">
+                        <button onclick="printInvoiceDocument()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 shadow-md">
+                            <i class="fa-solid fa-print"></i> Cetak / Simpan PDF
+                        </button>
+                        <button onclick="closeInvoicePreview()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-lg transition">Tutup</button>
+                    </div>
+                </div>
+
+                <!-- Lembar Kertas Invoice (Area yang bisa direview & dicetak) -->
+                <div id="invoicePrintArea" class="p-8 space-y-6 bg-white">
+                    
+                    <!-- Kop Surat dengan Background Header Korporat & Logo -->
+                    <div class="relative overflow-hidden rounded-xl bg-slate-900 text-white p-6 flex items-center justify-between border-b-4 border-amber-600">
+                        <!-- Dekorasi Background Elegan di Header -->
+                        <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#c5a880_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                        
+                        <!-- Kiri: Logo & Nama Perusahaan -->
+                        <div class="relative z-10 flex items-center gap-4">
+                            <div class="bg-white p-2 rounded-xl shadow-md flex items-center justify-center">
+                                <img src="logo.png" alt="Logo PT HJS" class="h-10 w-auto object-contain">
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-extrabold tracking-wide text-white">PT. HASNA JAYA SEJAHTERA</h2>
+                                <p class="text-[10px] uppercase tracking-widest text-amber-400 font-semibold">Your Workforce, Our Commitment</p>
+                            </div>
+                        </div>
+
+                        <!-- Kanan: Judul Invoice & Nomor -->
+                        <div class="relative z-10 text-right space-y-0.5">
+                            <p class="font-extrabold text-emerald-400 text-sm tracking-wide">INVOICE TAGIHAN RESMI</p>
+                            <p class="text-xs text-slate-300"><strong>No:</strong> <span id="invNumber">INV/2026/X/001</span></p>
+                            <p class="text-xs text-slate-300"><strong>Tanggal:</strong> <span id="invDate">11 Oktober 2026</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Info Perusahaan & Klien -->
+                    <div class="grid grid-cols-2 gap-4 text-xs">
+                        <div>
+                            <p class="font-bold text-slate-700 uppercase tracking-wider mb-1">Diterbitkan Oleh:</p>
+                            <p class="font-bold text-slate-900">PT. Hasna Jaya Sejahtera</p>
+                            <p class="text-slate-600">Kantor Cabang: Jl. Kawung Ece No.15, Bandung</p>
+                            <p class="text-slate-600">Email: hasnajayabandung@gmail.com</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-slate-700 uppercase tracking-wider mb-1">Ditujukan Kepada (Klien):</p>
+                            <p class="font-bold text-slate-900 text-sm" id="invClientName">PT. Maju Sejahtera</p>
+                            <p class="text-slate-600">Lokasi: <span id="invLocation">Bandung</span></p>
+                            <p class="text-slate-600">Penanggung Jawab Lapangan / Sales: <strong id="invOfficer" class="text-emerald-700">Belum Tercatat</strong></p>
+                        </div>
+                    </div>
+
+                    <!-- Tabel Tagihan -->
+                    <table class="w-full text-xs border-collapse border border-slate-300 mt-4">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-900">
+                                <th class="border border-slate-300 p-2.5 text-left">No</th>
+                                <th class="border border-slate-300 p-2.5 text-left">Deskripsi Layanan Alih Daya</th>
+                                <th class="border border-slate-300 p-2.5 text-center">Jumlah Personel</th>
+                                <th class="border border-slate-300 p-2.5 text-right">Tarif / Bln</th>
+                                <th class="border border-slate-300 p-2.5 text-right">Total Tagihan Bulanan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invTableBody">
+                            <!-- Diisi via JavaScript -->
+                        </tbody>
+                    </table>
+
+                    <!-- Total & Rincian Pembayaran -->
+                    <div class="flex justify-end pt-2">
+                        <div class="w-80 space-y-2 text-xs">
+                            <div class="flex justify-between py-1 border-b border-slate-200">
+                                <span>Subtotal Bulanan:</span>
+                                <span id="invSubtotal" class="font-bold">Rp 0</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-slate-200">
+                                <span>PPN (11%):</span>
+                                <span id="invPpn" class="font-bold">Rp 0</span>
+                            </div>
+                            <div class="flex justify-between py-2 text-sm font-extrabold bg-emerald-50 text-emerald-900 px-3 rounded-lg border border-emerald-200">
+                                <span>Tagihan Rutin Bulan Ini:</span>
+                                <span id="invGrandTotalMonth">Rp 0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ketentuan Pembayaran -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1 text-xs text-slate-600">
+                        <p class="font-bold text-slate-800">Instruksi Pembayaran & Catatan:</p>
+                        <p>Pembayaran transfer tepat waktu dapat disalurkan melalui rekening resmi PT. Hasna Jaya Sejahtera selambat-lambatnya 7 hari kalender setelah invoice diterbitkan.</p>
+                        <p class="italic text-slate-500">Catatan Klien: <span id="invNotes">-</span></p>
+                    </div>
+
+                    <!-- Tanda Tangan -->
+                    <div class="flex justify-between pt-8 text-xs">
+                        <div class="text-center space-y-12">
+                            <p>Mengetahui,<br><strong>PT. HASNA JAYA SEJAHTERA</strong></p>
+                            <p class="font-bold underline text-slate-900">Divisi Keuangan & Operasional</p>
+                        </div>
+                        <div class="text-center space-y-12">
+                            <p>Pihak Klien,<br><strong id="invClientSign">-</strong></p>
+                            <p class="font-bold underline text-slate-900">(_________________________)</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>`;
+        document.body.insertAdjacentHTML('beforeend', invoiceModalHTML);
+    });
+
+    function openInvoicePreview() {
+        const clientName = document.getElementById('clientName').value.trim() || 'PT. Klien Mitra';
+        const location = document.getElementById('clientLocation').value.trim() || 'Bandung';
+        const serviceName = selectedServiceName || 'Security';
+        const personnelCount = parseInt(document.getElementById('personnelCount').value) || 1;
+        const monthlyInvoice = document.getElementById('resMonthlyInvoice').innerText;
+        const notes = document.getElementById('proposalNotes').value || '-';
+
+        document.getElementById('invClientName').innerText = clientName;
+        document.getElementById('invClientSign').innerText = clientName;
+        document.getElementById('invLocation').innerText = location;
+        document.getElementById('invNotes').innerText = notes;
+        
+        const officerInput = document.getElementById('modalDealOfficer');
+        document.getElementById('invOfficer').innerText = (officerInput && officerInput.value.trim()) ? officerInput.value.trim() : 'Ditangani Tim Lapangan HJS';
+
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('invDate').innerText = new Date().toLocaleDateString('id-ID', options);
+
+        const tableBody = document.getElementById('invTableBody');
+        tableBody.innerHTML = `
+            <tr>
+                <td class="border border-slate-300 p-2.5 text-center">1</td>
+                <td class="border border-slate-300 p-2.5 font-medium">Penyediaan Jasa Alih Daya - ${serviceName} Profesional</td>
+                <td class="border border-slate-300 p-2.5 text-center">${personnelCount} Orang</td>
+                <td class="border border-slate-300 p-2.5 text-right">Sesuai Kontrak</td>
+                <td class="border border-slate-300 p-2.5 text-right font-bold">${monthlyInvoice}</td>
+            </tr>
+        `;
+
+        document.getElementById('invSubtotal').innerText = document.getElementById('resMonthlyInvoice').innerText;
+        document.getElementById('invPpn').innerText = document.getElementById('printPpn') ? document.getElementById('printPpn').innerText : '-';
+        document.getElementById('invGrandTotalMonth').innerText = monthlyInvoice;
+
+        document.getElementById('invoicePreviewModal').classList.remove('hidden');
+    }
+
+    function closeInvoicePreview() {
+        document.getElementById('invoicePreviewModal').classList.add('hidden');
+    }
+
+    function printInvoiceDocument() {
+        const printContents = document.getElementById('invoicePrintArea').innerHTML;
+        const originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = `<div style="padding: 20px; background: white; color: black;">${printContents}</div>`;
+        window.print();
+        document.body.innerHTML = originalContents;
+        window.location.reload();
+    }
+</script>
+<script>
+    function loadClientFromJson(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+
+                if (data.client) document.getElementById('clientName').value = data.client;
+                if (data.location) document.getElementById('clientLocation').value = data.location;
+                if (data.personnelCount) document.getElementById('personnelCount').value = data.personnelCount;
+                if (data.contractPeriodMonths) {
+                    const periodSelect = document.getElementById('contractPeriod');
+                    if (periodSelect) periodSelect.value = data.contractPeriodMonths;
+                }
+                if (data.notes) document.getElementById('proposalNotes').value = data.notes;
+
+                const officerInput = document.getElementById('modalDealOfficer');
+                if (officerInput && data.officerInCharge) {
+                    officerInput.value = data.officerInCharge;
+                }
+
+                if (typeof calculateProposal === 'function') {
+                    calculateProposal();
+                }
+
+                alert(`Data arsip klien "${data.client}" berhasil dimuat ke form!\n\nPetugas/Sales: ${data.officerInCharge || 'Tidak Tercatat'}\nSilakan klik "Pratinjau & Cetak Invoice Klien" untuk melihat tagihannya.`);
+            } catch (error) {
+                alert("Gagal membaca file JSON. Pastikan file arsip klien HJS yang dipilih sudah benar.");
+                console.error(error);
+            }
+            event.target.value = '';
+        };
+        reader.readAsText(file);
+    }
+</script>
+</body>
+</html>
